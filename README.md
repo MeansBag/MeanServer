@@ -1,18 +1,11 @@
-# MeanServer
+MeanServer
 
+mysql-5.7.20
 
+springMvc 4.2.9
 
-# …or create a new repository on the command line
-echo "# MeanServer" >> README.md
-git init
-git add README.md
-git commit -m "first commit"
-git remote add origin https://github.com/MeansBag/MeanServer.git
-git push -u origin master
+maven 2.0
 
-# …or push an existing repository from the command line
-git remote add origin https://github.com/MeansBag/MeanServer.git
-git push -u origin master
+tomcat8.0
 
-# …or import code from another repository
-You can initialize this repository with code from a Subversion, Mercurial, or TFS project.
+jdk1.8
