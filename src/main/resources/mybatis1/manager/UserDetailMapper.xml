@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+    <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="UserDetailMapper">
+    
+     <!-- 通用查询结果列-->
+    <sql id="Base_Column_List">
+         id,user_code,user_name,phone,real_name,idno,crop_name,crop_person,branch_name,wxnum,bankaccno,mail_addrss,zip_code,ref_phone,
+         img_addrss,qr_code,user_type,real_stat,create_time,modify_time,operator
+         ,sex,birth_year,birth_month,provice,city,county,email
+    </sql>
+      
+	<select id="findByUserCode" parameterType="pd" resultType="pd" >
+        select 
+         <include refid="Base_Column_List" />
+        from tb_user_detail  where user_code = #{user_code}
+    </select>
+    <!-- 用户列表(用户组) -->
+    <select id="userbuylistPage" parameterType="page" resultType="pd">
+        <!-- select a.*,b.real_name ref_real_name,c.total_amnt,c.avb_amnt,c.froze_amnt, 
+		(select sum(t.amnt) from tb_acc_detail t where t.sub_accno='010101' and t.user_code = a.user_code)total_reward, 
+		(select sum(t.outamnt) from tb_acc_outdetail t where t.sub_acc_no='010401' and t.user_code = a.user_code)total_out,d.`status` 
+		from tb_user_detail a,tb_user_detail b,tb_acc c,tb_user d 
+		where 1=1 
+		and a.ref_phone = b.phone 
+		and a.user_code = c.user_code 
+		and a.user_code = d.user_code  -->
+        select a.*,d.`status` ,
+		(select sum(new_num) from ORDER_INFO t where t.user_code  = a.user_code and t.order_status in ('1','2')) total_amnt
+		from tb_user_detail a  
+		LEFT JOIN tb_user d ON a.user_code = d.user_code 
+		where 1=1 
+        <!-- 关键词检索 -->
+          <if test="pd.user_name != null and pd.user_name != ''">
+            and  a.user_name like CONCAT(CONCAT('%', #{pd.user_name}),'%')          
+        </if>
+         <if test="pd.real_name != null and pd.real_name != ''">
+            and  a.real_name like CONCAT(CONCAT('%', #{pd.real_name}),'%')          
+        </if>
+        <if test="pd.phone != null and pd.phone != ''">
+            and  a.phone like CONCAT(CONCAT('%', #{pd.phone}),'%')          
+        </if>
+        <if test="pd.ref_username != null and pd.ref_username != ''">
+            and  a.ref_username like CONCAT(CONCAT('%', #{pd.ref_username}),'%')          
+        </if>      
+        <if test="pd.status != null and pd.status != ''">
+            and  d.`status` = #{pd.status}
+        </if>
+        <if test="pd.startTime != null and pd.startTime != ''">
+            and  a.create_time &gt;= #{pd.startTime}
+        </if>
+        <if test="pd.endTime != null and pd.endTime != ''">
+            and  substring(a.create_time,1,10)&lt;= #{pd.endTime}
+        </if>
+        order by a.id desc
+    </select>
+    <!-- 查询符合条件的所有信息 -->
+    <select id="userbuylist" parameterType="pd" resultType="pd">
+        select 
+        a.user_name,       
+        a.real_name,
+        a.phone,
+        a.ref_username ref_username,
+        a.ref_phone,
+        date_format(a.create_time,'%Y-%m-%d %T') create_time1,
+        (case when d.`status`='1' then '有效' else '禁用' end) `status`,
+        (case when a.user_type ='1' then '普通会员' when a.user_type ='2' then 'VIP会员' else '' end) user_type1,
+        (select sum(new_num) from ORDER_INFO t where t.user_code  = a.user_code and t.order_status in ('1','2')) total_amnt
+        from tb_user_detail a  
+		LEFT JOIN tb_user d ON a.user_code = d.user_code 
+        where 1=1 
+        <!-- 关键词检索 -->
+          <if test="pd.user_name != null and pd.user_name != ''">
+            and  a.user_name like CONCAT(CONCAT('%', #{pd.user_name}),'%')          
+        </if>
+         <if test="pd.real_name != null and pd.real_name != ''">
+            and  a.real_name like CONCAT(CONCAT('%', #{pd.real_name}),'%')          
+        </if>
+        <if test="pd.phone != null and pd.phone != ''">
+            and  a.phone like CONCAT(CONCAT('%', #{pd.phone}),'%')          
+        </if>
+        <if test="pd.ref_username != null and pd.ref_username != ''">
+            and  a.ref_username like CONCAT(CONCAT('%', #{pd.ref_username}),'%')          
+        </if>      
+        <if test="pd.status != null and pd.status != ''">
+            and  d.`status` = #{pd.status}
+        </if>
+        <if test="pd.startTime != null and pd.startTime != ''">
+            and  a.create_time &gt;= #{pd.startTime}
+        </if>
+        <if test="pd.endTime != null and pd.endTime != ''">
+            and  substring(a.create_time,1,10)&lt;= #{pd.endTime}
+        </if>
+        order by a.id desc
+    </select>
+    <update id="updatebuyflag" parameterType="pd">    
+         update tb_user_detail 
+         <set> 
+                buy_flag = #{buy_flag},
+                modify_time = now(),
+           <if test="operator != null and operator != ''">
+                operator = #{operator}
+           </if>     
+         </set>
+         where id = #{id}     
+     </update>
+     
+     <select id="getUserDetailById" parameterType="pd" resultType="pd">
+        select 
+        <include refid="Base_Column_List" />
+        from tb_user_detail
+        where id=#{id}
+     </select>
+<!--      更新用户状态 -->
+     <update id="updateUserStatus" parameterType="pd">
+        update tb_user 
+        <set> 
+            `status` = #{status} ,
+            modify_time = now()
+        </set>
+        where user_code = #{user_code}
+     </update>
+     
+     <update id="changeusertype" parameterType="pd">
+        update tb_user 
+        <set> 
+            user_type = #{userType} ,
+            modify_time = now()
+        </set>
+        where user_code = #{user_code}
+     </update>
+     
+     <update id="changeusertypedetail" parameterType="pd">
+        update tb_user_detail 
+        <set> 
+            user_type = #{userType} ,
+            modify_time = now()
+        </set>
+        where user_code = #{user_code}
+     </update>
+     
+       <update id="changeusertypefriend" parameterType="pd">
+        update tb_user_friendship 
+        <set> 
+            recomuser_type = #{userType} ,
+            modify_time = now()
+        </set>
+        where recomuser_code = #{user_code}
+     </update>
+   
+     
+<!--      重置密码 -->
+     <update id="resetPassword" parameterType="pd">
+        update tb_user
+        <set> 
+            pwdhash = #{pwdhash} ,
+            modify_time = now()
+        </set>
+        where user_code = #{user_code}
+     </update>
+<!--     查询会员基本信息 -->
+     <select id="findByPhone" parameterType="pd" resultType="pd" >
+        select a.*,b.real_name ref_real_name
+        from tb_user_detail  a,tb_user_detail b
+        where 1=1 
+        and a.ref_phone = b.phone
+        and a.phone = #{phone}
+    </select>
+    
+     <select id="findByUserName" parameterType="pd" resultType="pd" >
+        select a.*
+        from tb_user_detail  a
+        and a.user_name = #{user_name}
+    </select>
+    
+    <!-- 查询用户信息和奖励、发放、账户余额 -->
+     <select id="findUserInfoByPhone" parameterType="java.lang.String" resultType="pd" >
+       select a.*,
+        (select sum(new_num) from ORDER_INFO t where t.user_code  = a.user_code and t.order_status in ('1','2')) total_amnt
+        from tb_user_detail  a 
+        where 1=1 
+        and a.phone = #{phone} 
+    </select>
+    
+      <select id="findUserInfoByUserName" parameterType="java.lang.String" resultType="pd" >
+        select a.*,
+        (select sum(new_num) from ORDER_INFO t where t.user_code  = a.user_code and t.order_status in ('1','2')) total_amnt
+        from tb_user_detail  a 
+        where 1=1  
+        and a.user_name = #{userName} 
+    </select>
+    
+    <!-- 查询各类会员的数量 -->
+    <select id="findcount" parameterType="pd" resultType="pd">
+        select 
+        sum(tt)  tNum,
+        sum(lva) aNum,
+        sum(lvb) bNum,
+        sum(lvc) cNum
+        from 
+        (select 
+        1 as tt,
+        case when rela_level='A' then 1 else 0 end as lva,
+        case when rela_level='B' then 1 else 0 end as lvb,
+        case when rela_level='C' then 1 else 0 end as lvc
+         from tb_user_friendship 
+        where user_code =#{user_code}) a 
+    </select>
+    <!-- 查询下级会员列表 -->
+    <select id="listPageVIP" parameterType="page"  resultType="pd" >
+        SELECT
+		    a.phone,
+		    a.real_name,
+		    a.create_time, 
+			a.ref_phone,
+			b.rela_level,
+			b.recomuser_code,
+			c.`status`,
+			(select sum(new_num) from ORDER_INFO t where t.user_code  = a.user_code and t.order_status in ('1','2')) total_amnt
+		FROM
+		    tb_user_detail a,
+		    tb_user_friendship b,tb_user c
+		where 1=1
+		AND a.user_code = b.recomuser_code
+		And b.recomuser_code = c.user_code
+		AND b.user_code = #{pd.user_code}
+		and b.rela_level  &lt;&gt;''
+		and b.rela_level is not NULL
+		order by a.id desc 
+    </select>
+    <select id="findAllPhoneByCondition" parameterType="pd"  resultType="pd" >
+        SELECT phone
+		FROM
+		    tb_user_detail 
+		where 1=1
+		<if test="freeze_flag != null and freeze_flag != ''">
+           AND freeze_flag = #{freeze_flag}
+        </if>
+    </select>
+</mapper>     

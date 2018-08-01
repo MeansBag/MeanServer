@@ -1,0 +1,199 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>FH</groupId>
+	<artifactId>MVNFHM</artifactId>
+	<packaging>war</packaging>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>MVNFHM</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<javax-activation.version>1.1</javax-activation.version>
+		<!-- 4.3.7 ApplicationContext-mvc.xml误报红叉，但不影响正常运行 -->
+		<!-- <spring.version>4.3.7.RELEASE</spring.version> -->
+		<spring.version>4.2.9.RELEASE</spring.version>
+		<mysql-connector-java.version>5.1.34</mysql-connector-java.version>
+	</properties>
+
+	<dependencies>
+		<!-- jackjson-all-1.7.6 -->
+		<dependency>
+			<groupId>jackson</groupId>
+			<artifactId>jackson</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/jackson-all-1.7.6.jar</systemPath>
+		</dependency>
+		<!-- jpush-java-libraryV2 -->
+		<dependency>
+			<groupId>jpush</groupId>
+			<artifactId>jpush</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/jpush-java-libraryV2.jar</systemPath>
+		</dependency>
+		<!-- mail -->
+		<dependency>
+			<groupId>mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/mail.jar</systemPath>
+		</dependency>
+		<!--mybatis-ehcache-1.0.3 -->
+		<dependency>
+			<groupId>mybatis-ehcache</groupId>
+			<artifactId>mybatis-ehcache</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/mybatis-ehcache-1.0.3.jar</systemPath>
+		</dependency>
+		<!-- mybatis-oscache-1.0 -->
+		<dependency>
+			<groupId>mybatis-oscache</groupId>
+			<artifactId>mybatis-oscache</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/mybatis-oscache-1.0.1.jar</systemPath>
+		</dependency>
+		<!-- ojdbc6 -->
+		<dependency>
+			<groupId>ojdbc6</groupId>
+			<artifactId>ojdbc6</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/ojdbc6.jar</systemPath>
+		</dependency>
+		<!-- pinyin4j-2.5.0 -->
+		<dependency>
+			<groupId>pinyin4j</groupId>
+			<artifactId>pinyin4j</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/pinyin4j-2.5.0.jar</systemPath>
+		</dependency>
+		<!-- poi-3.11-20141221 -->
+		<dependency>
+			<groupId>poi</groupId>
+			<artifactId>poi	</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/poi-3.11-20141221.jar</systemPath>
+		</dependency>
+		<!-- poi-examples-3.11-20141221 -->
+		<dependency>
+			<groupId>poi-examples</groupId>
+			<artifactId>poi-examples</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/poi-examples-3.11-20141221.jar</systemPath>
+		</dependency>
+		<!--poi-excelant-3.11-20141221 -->
+		<dependency>
+			<groupId>poi-excelant</groupId>
+			<artifactId>poi-excelant</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/poi-excelant-3.11-20141221.jar</systemPath>
+		</dependency>
+		<!--poi-ooxml-3.11-20141221 -->
+		<dependency>
+			<groupId>poi-ooxml</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/poi-ooxml-3.11-20141221.jar</systemPath>
+		</dependency>
+		<!-- poi-ooxml-schemas-3.11-20141221 -->
+		<dependency>
+			<groupId>poi-ooxml-schemas</groupId>
+			<artifactId>poi-ooxml-schemas</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/poi-ooxml-schemas-3.11-20141221.jar</systemPath>
+		</dependency>
+		<!-- poi-scratchpad-3.11-20141221 -->
+		<dependency>
+			<groupId>poi-scratchpad</groupId>
+			<artifactId>poi-scratchpad</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/poi-scratchpad-3.11-20141221.jar</systemPath>
+		</dependency>
+		<!--QRCode -->
+		<dependency>
+			<groupId>QRCode</groupId>
+			<artifactId>QRCode</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/QRCode.jar</systemPath>
+		</dependency>
+		<!-- saaj -->
+		<dependency>
+			<groupId>saaj</groupId>
+			<artifactId>saaj</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/saaj.jar</systemPath>
+		</dependency>
+		<!-- shiro-all -->
+		<dependency>
+			<groupId>shiro</groupId>
+			<artifactId>shiro</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/shiro-all-1.2.3.jar</systemPath>
+		</dependency>
+		<!-- sun.misc.BASE64Decoder -->
+		<dependency>
+			<groupId>sun-misc</groupId>
+			<artifactId>sun-misc</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/sun.misc.BASE64Decoder.jar</systemPath>
+		</dependency>
+		<!-- ueditor -->
+		<dependency>
+			<groupId>com.baidu</groupId>  
+		    <artifactId>ueditor</artifactId>  
+		    <version>1.1.2</version>  
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/ueditor-1.1.2.jar</systemPath>
+		</dependency>
+		<!-- java_websocket -->
+		<dependency>
+			<groupId>java_websocket</groupId>
+			<artifactId>java_websocket</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/java_websocket.jar</systemPath>
+		</dependency>
+		<!-- weixinapi -->
+		<dependency>
+			<groupId>weixinapi</groupId>
+			<artifactId>weixinapi</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/weixinapi.jar</systemPath>
+		</dependency>
+		<!-- weaver-1.6.8.RELEASE.jar -->
+		<dependency>
+			<groupId>weaver-1.6.8</groupId>
+			<artifactId>weaver-1.6.8</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/com.springsource.org.aspectj.weaver-1.6.8.RELEASE.jar</systemPath>
+		</dependency>
+		<!-- json-1.5-20090211 -->
+		<dependency>
+			<groupId>json-1.5-20090211</groupId>
+			<artifactId>json-1.5-20090211</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/json-1.5-20090211.jar</systemPath>
+		</dependency>
+	</dependencies>
+	
+</project>

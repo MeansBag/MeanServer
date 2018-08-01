@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ProjectMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		pro_crowdfunding
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		PROJECT_NAME,	
+		PROJECT_STAGE,	
+		COMPANY_NAME,	
+		PROJECT_DESC_DETAIL,	
+		QUOTA_LIMIT,	
+		START_TIME,	
+		END_TIME,	
+		PROJECT_STATE,	
+		VISIBLE_TYPE,	
+		CREATE_TIME,	
+		VIDEO_URL,	
+		FILE_URL,	
+		IS_RECOMMEND,	
+		BROWSE_NUM,	
+		COVER_PICTURE,	
+		PROJECT_ID,
+		STOCK_NUM
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{PROJECT_NAME},	
+		#{PROJECT_STAGE},	
+		#{COMPANY_NAME},	
+		#{PROJECT_DESC_DETAIL},	
+		#{QUOTA_LIMIT},	
+		#{START_TIME},	
+		#{END_TIME},	
+		#{PROJECT_STATE},	
+		#{VISIBLE_TYPE},	
+		#{CREATE_TIME},	
+		#{VIDEO_URL},	
+		#{FILE_URL},	
+		#{IS_RECOMMEND},	
+		#{BROWSE_NUM},	
+		#{COVER_PICTURE},
+		#{PROJECT_ID},
+		#{STOCK_NUM}
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+	<include refid="Field"></include>
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			PROJECT_ID = #{PROJECT_ID}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			PROJECT_NAME = #{PROJECT_NAME},
+			PROJECT_STAGE = #{PROJECT_STAGE},
+			COMPANY_NAME = #{COMPANY_NAME},
+			PROJECT_DESC_DETAIL = #{PROJECT_DESC_DETAIL},
+			QUOTA_LIMIT = #{QUOTA_LIMIT},
+			START_TIME = #{START_TIME},
+			END_TIME = #{END_TIME},
+			PROJECT_STATE = #{PROJECT_STATE},
+			VISIBLE_TYPE = #{VISIBLE_TYPE},
+			CREATE_TIME = #{CREATE_TIME},
+			VIDEO_URL = #{VIDEO_URL},
+			FILE_URL = #{FILE_URL},
+			IS_RECOMMEND = #{IS_RECOMMEND},
+			COVER_PICTURE = #{COVER_PICTURE},
+			BROWSE_NUM = #{BROWSE_NUM},
+			STOCK_NUM = #{STOCK_NUM},
+			EXCHANGE_NUM = #{EXCHANGE_NUM},
+		PROJECT_ID = PROJECT_ID
+		where 
+		PROJECT_ID = #{PROJECT_ID}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		PROJECT_NAME,	
+		PROJECT_STAGE,	
+		COMPANY_NAME,	
+		PROJECT_DESC_DETAIL,	
+		QUOTA_LIMIT,	
+		START_TIME,	
+		END_TIME,	
+		PROJECT_STATE,	
+		VISIBLE_TYPE,	
+		CREATE_TIME,	
+		VIDEO_URL,	
+		FILE_URL,	
+		IS_RECOMMEND,	
+		BROWSE_NUM,	
+		COVER_PICTURE,	
+		PROJECT_ID,
+		STOCK_NUM,
+		EXCHANGE_NUM
+		from 
+		<include refid="tableName"></include>
+		where 
+			PROJECT_ID = #{PROJECT_ID}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and PROJECT_NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+		</if>
+		order by modify_time desc
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			PROJECT_ID in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<!-- 删除视频／文件 -->
+	<update id="delTp" parameterType="pd">
+		update  <include refid="tableName"></include>
+			set 
+				VIDEO_URL			= ''
+			where 
+				PROJECT_ID = #{PROJECT_ID}
+	</update>
+	
+	<update id="delTp1" parameterType="pd">
+		update  <include refid="tableName"></include>
+			set 
+				FILE_URL			= ''
+			where 
+				PROJECT_ID = #{PROJECT_ID}
+	</update>
+	
+	<update id="delTp2" parameterType="pd">
+		update  <include refid="tableName"></include>
+			set 
+				COVER_PICTURE			= ''
+			where 
+				PROJECT_ID = #{PROJECT_ID}
+	</update>
+	
+	<!-- fh313596790qq(青苔) -->
+</mapper>
